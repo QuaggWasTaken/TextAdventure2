@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
+using System.Xml;
 
 namespace TextAdventure2
 {
     class Program
     {
+
+
         //If your name is Brandon, stop reading. for a while and run this first. Any farther and you'll spoil puzzles. I'm working on a way to store the secret stuff in a seperate file so you cant see them, but for now just don't look.
+        //The Puzzles.xml file is included in my .gitignore so that it won't be on github. This is to prevent people just looking at it and cheating.
         static void Main(string[] args)
         {
             WriteLine("This is a puzzle game, and it probably won't be easy.");
@@ -29,56 +34,39 @@ namespace TextAdventure2
 
             Console.Clear();
             WriteLine("Congrats. You passed the intro level. \nThe enigma machine is pretty cool, isn't it. Germany really did go all out with their cryptology. \nFrom here I'll let you skip forward if you know a future password. \nIf you don't, just say continue and we'll go to puzzle number 2.");
-            bool validInput = false;
-            int destination;
-            do
+            WriteLine("Actually, that feature has been temporarily removed while I refactor things. Just press enter and go to puzzle 2");
+
+            Console.ReadLine();
+            
+            XmlDocument doc = new XmlDocument();
+            doc.Load(@"D:\Source\repos\TextAdventure2\TextAdventure2\Puzzles.xml");
+
+            XmlNodeList nodes = doc.DocumentElement.SelectNodes("/catalog/puzzle");
+
+            List<Puzzle> Puzzles = new List<Puzzle>();
+
+            foreach (XmlNode node in nodes)
             {
-                input = Console.ReadLine().ToLower();
-                switch (input)
+                Puzzle Puzzle = new Puzzle
                 {
-                    case "continue":
-                        destination = 2;
-                        validInput = true;
-                        break;
-                    case "brutus":
-                        destination = 3;
-                        validInput = true;
-                        break;
-                    case "batterystaple":
-                        destination = 4;
-                        validInput = true;
-                        break;
-                    case "fliesrtasty":
-                        destination = 5;
-                        validInput = true;
-                        break;
-                    default:
-                        destination = 2;
-                        break;
-                }
-            } while (!validInput);
-            bool end = false;
-            while (!end)
-            {
-                Console.Clear();
-                switch (destination)
-                {
-                    case 2:
-                        Puzzle2();
-                        break;
-                    case 3:
-                        Puzzle3();
-                        break;
-                    case 4:
-                        Puzzle4();
-                        break;
-                    default:
-                        end = true;
-                        break;
-                }
-                destination++;
+                    Answer = node.SelectSingleNode("answer").InnerText,
+                    Question = node.SelectSingleNode("description").InnerText,
+                    Title = node.SelectSingleNode("title").InnerText,
+                    IDNumber = node.Attributes["id"].Value
+                };
+
+                Puzzles.Add(Puzzle);
             }
-            WriteLine("Congrats! You finished my game. It'll probably get longer over time, so remember the last password you used and you can skip to the new stuff later.");
+
+            Console.WriteLine("Total Puzzles: " + Puzzles.Count);
+
+
+            foreach (Puzzle puzzle in Puzzles)
+            {
+                ShowPuzzle(puzzle);
+            }
+            WriteLine("Congrats! You finished my game. It'll probably get longer over time, so remember the last password you used and you can skip to the new stuff later (or dont cause thats not a thing right now)");
+
         }
         static void WriteLine(string input)
         {
@@ -89,36 +77,28 @@ namespace TextAdventure2
             }
             Console.Write("\n");
         }
-        static void Puzzle2()
+        static void ShowPuzzle(Puzzle puzzle)
         {
+
             string input;
             do
             {
-                WriteLine("So, this one won't be as much of a giveaway. You might have to brute force it a bit. Here's your hint: Euxwxv.");
+                Console.Clear();
+                WriteLine(puzzle.Title);
+                WriteLine("");
+                WriteLine(puzzle.Question);
 
                 input = Console.ReadLine().ToLower();
-            } while (input != "brutus");
-        }
-        static void Puzzle3()
-        {
-            string input;
-            do
-            {
-                WriteLine("It looks like someone hacked into this, you'll need to use the admin password to lock them out.\nI can't give it to you directly, they could intercept it.\nAll I can give you is this: You already have the key, Zfok jstjqhlv jj vtnlfisLnsqcy.");
-
-                input = Console.ReadLine().ToLower();
-            } while (input != "batterystaple");
-        }
-        static void Puzzle4()
-        {
-            string input;
-            do
-            {
-                WriteLine("You know, we actually taught spiders to count once, they loved this set of numbers for some reason: 6 12 9 5 19 18 20 1 19 20 25");
-
-                input = Console.ReadLine().ToLower();
-            } while (input != "fliesrtasty");
+            } while (input != puzzle.Answer);
         }
 
+
+    }
+    class Puzzle
+    {
+        public string IDNumber { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
+        public string Title { get; set; }
     }
 }
