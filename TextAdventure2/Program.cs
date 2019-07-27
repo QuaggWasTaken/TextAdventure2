@@ -66,20 +66,18 @@ namespace TextAdventure2
                 ShowPuzzle(puzzle);
             }
             WriteLine("Congrats! You finished my game. It'll probably get longer over time, so remember the last password you used and you can skip to the new stuff later (or dont cause thats not a thing right now)");
-
         }
         static void WriteLine(string input)
         {
             foreach (char letter in input)
             {
                 Console.Write(letter);
-                Thread.Sleep(5);
+                Thread.Sleep(50);
             }
             Console.Write("\n");
         }
         static void ShowPuzzle(Puzzle puzzle)
         {
-
             string input;
             do
             {
@@ -91,8 +89,6 @@ namespace TextAdventure2
                 input = Console.ReadLine().ToLower();
             } while (input != puzzle.Answer);
         }
-
-
     }
     class Puzzle
     {
