@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<catalog>
+  <puzzle id="2">
+    <title>Cool Title Bro</title>
+    <description>
+      This is the question that will be asked, and a hint as well, the answer for this is password. IDs start at 2 since the first puzzle is hardcoded in.
+    </description>
+    <answer>password</answer>
+  </puzzle>
+</catalog>
