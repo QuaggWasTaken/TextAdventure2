@@ -23,6 +23,8 @@ namespace TextAdventure2
             WriteLine($"Nice to meet you {PlayerName}, I'm your host for the next while.");
             WriteLine("Press enter to continue...");
             Console.ReadLine();
+
+            //This format of do while input is wrong is the basis of how all the puzzles are run, but more generalized down in the ShowPuzzle(Puzzle) method
             string input;
             do
             {
@@ -33,12 +35,18 @@ namespace TextAdventure2
             } while (input != "password");
 
             Console.Clear();
+
+
             WriteLine("Congrats. You passed the intro level. \nThe enigma machine is pretty cool, isn't it. Germany really did go all out with their cryptology. \nFrom here I'll let you skip forward if you know a future password. \nIf you don't, just say continue and we'll go to puzzle number 2.");
             WriteLine("Actually, that feature has been temporarily removed while I refactor things. Just press enter and go to puzzle 2");
+            //I need to find a better way than a foreach loop to do this, so that I can actually reimplement this function. 
+
 
             Console.ReadLine();
             
             XmlDocument doc = new XmlDocument();
+
+            //Replace this path with the path to your Puzzles.xml file
             doc.Load(@"D:\Source\repos\TextAdventure2\TextAdventure2\Puzzles.xml");
 
             XmlNodeList nodes = doc.DocumentElement.SelectNodes("/catalog/puzzle");
