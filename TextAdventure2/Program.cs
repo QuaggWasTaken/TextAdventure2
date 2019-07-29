@@ -38,11 +38,8 @@ namespace TextAdventure2
 
 
             WriteLine("Congrats. You passed the intro level. \nThe enigma machine is pretty cool, isn't it. Germany really did go all out with their cryptology. \nFrom here I'll let you skip forward if you know a future password. \nIf you don't, just say continue and we'll go to puzzle number 2.");
-            WriteLine("Actually, that feature has been temporarily removed while I refactor things. Just press enter and go to puzzle 2");
+            //WriteLine("Actually, that feature has been temporarily removed while I refactor things. Just press enter and go to puzzle 2");
             //I need to find a better way than a foreach loop to do this, so that I can actually reimplement this function. 
-
-
-            Console.ReadLine();
             
             XmlDocument doc = new XmlDocument();
 
@@ -66,21 +63,42 @@ namespace TextAdventure2
                 Puzzles.Add(Puzzle);
             }
 
-            Console.WriteLine("Total Puzzles: " + Puzzles.Count);
-
-
-            foreach (Puzzle puzzle in Puzzles)
+            //Console.WriteLine("Total Puzzles: " + Puzzles.Count);
+            int destination = -1;
+            while (destination == -1)
             {
-                ShowPuzzle(puzzle);
+                input = Console.ReadLine();
+                if (input == "continue" || input == "")
+                {
+                    destination = 0;
+                }
+                else
+                {
+                    foreach (Puzzle puzzle in Puzzles)
+                    {
+                        if (input.ToLower() == puzzle.Answer)
+                        {
+                            destination = Int32.Parse(puzzle.IDNumber)-1;
+                            break;
+                        }
+                    }
+
+                }
             }
-            WriteLine("Congrats! You finished my game. It'll probably get longer over time, so remember the last password you used and you can skip to the new stuff later (or dont cause thats not a thing right now)");
+
+            for (; destination < Puzzles.Count; destination++)
+            {
+                ShowPuzzle(Puzzles[destination]);
+            }
+            Console.Clear();
+            WriteLine("Congrats! You finished my game. It'll probably get longer over time, so remember the last password you used and you can skip to the new stuff later.");
         }
         static void WriteLine(string input)
         {
             foreach (char letter in input)
             {
                 Console.Write(letter);
-                Thread.Sleep(50);
+                Thread.Sleep(5);
             }
             Console.Write("\n");
         }
